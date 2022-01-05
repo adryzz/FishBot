@@ -8,7 +8,7 @@ namespace FishBot;
 
 public static class Utils
     {
-        public static long? PingDNS()
+        public static async Task<long?> PingDnsAsync()
         {
             List<NetworkInterface> Interfaces = new List<NetworkInterface>();
             foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
@@ -69,7 +69,7 @@ public static class Utils
                     //2) The timeout value
                     //3) A buffer (our byte array)
                     //numping) PingOptions
-                    PingReply pingReply = ping.Send(address, 1000, buffer, pingOptions);
+                    PingReply pingReply = await ping.SendPingAsync(address, 1000, buffer, pingOptions);
 
                     //make sure we dont have a null reply
                     if (!(pingReply == null))

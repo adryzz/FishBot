@@ -28,7 +28,7 @@ namespace FishBot
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int latency = Context.Client.Latency;
-            long? ping = Utils.PingDNS();
+            long? ping = await Utils.PingDnsAsync();
             string text;
             watch.Stop();
             if (!ping.HasValue)
