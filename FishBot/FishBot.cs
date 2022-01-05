@@ -35,7 +35,11 @@ public class FishBot : IAsyncDisposable
         //check for insults and ask for bug report
         if (arg.Content.Contains("fuck"))
         {
-            await arg.Channel.SendMessageAsync("You seem angry.\nWould you like to submit a bug report?");
+            var embed = new EmbedBuilder();
+            embed.WithColor(Color.Red);
+            embed.WithTitle("You seem angry...");
+            embed.WithDescription("Would you like to [submit a bug report?](https://github.com/adryzz/FishBot/issues/new)");
+            await arg.Channel.SendMessageAsync("", false, embed.Build());
         }
     }
 
