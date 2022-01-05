@@ -9,7 +9,7 @@ namespace FishBot
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
-        [Command("help")]
+        [Command("help", RunMode = RunMode.Async)]
         public async Task Help()
         {
             var embed = new EmbedBuilder();
