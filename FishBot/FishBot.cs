@@ -1,3 +1,4 @@
+using Anilist4Net;
 using Discord;
 using Discord.WebSocket;
 
@@ -8,6 +9,8 @@ public class FishBot : IAsyncDisposable
     protected DiscordSocketClient Client;
     public Configuration Config = new Configuration();
     protected CommandHandler? Handler = new CommandHandler();
+
+    public Client AnimeClient = new Client();
     public FishBot()
     {
         if (File.Exists("config.json"))

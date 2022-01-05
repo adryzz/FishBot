@@ -1,6 +1,7 @@
 using Discord.Commands;
 using Discord;
 using System.Diagnostics;
+using Anilist4Net;
 
 
 namespace FishBot
@@ -43,6 +44,27 @@ namespace FishBot
             embed.WithDescription(text);
             embed.WithCurrentTimestamp();
             await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("user", RunMode = RunMode.Async)]
+        public async Task User(string? userName = null)
+        {
+            try
+            {
+                User user = await Program.Bot.AnimeClient.GetUserByName(userName ?? Context.User.Username);
+                var embed = new EmbedBuilder();
+                embed.Author = new EmbedAuthorBuilder {Name = user.Name, Url = user.SiteUrl, IconUrl = user.MediumAvatar };
+                embed.Color = Utils.ConvertUserProfileColor(user.ProfileColour);
+                //embed.Description;
+                Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "User not found.";
+                embed.Color = Color.Red;
+                Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
         }
     }
 }

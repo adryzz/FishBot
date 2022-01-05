@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using Anilist4Net.Enums;
+using Discord;
 
 namespace FishBot;
 
@@ -124,4 +126,34 @@ public static class Utils
             return returnValue;
         }
 
+        public static Color ConvertUserProfileColor(UserProfileColours color)
+        {
+            switch (color)
+            {
+                case UserProfileColours.blue:
+                    return  Color.Blue;
+                
+                case UserProfileColours.gray:
+                    return Color.DarkGrey;
+                
+                case UserProfileColours.green:
+                    return Color.Green;
+                
+                case UserProfileColours.orange:
+                    return Color.Orange;
+                
+                case UserProfileColours.pink:
+                    return Color.Default;
+                
+                case UserProfileColours.purple:
+                    return Color.Purple;
+                
+                case UserProfileColours.red:
+                    return Color.Red;
+                
+                default:
+                    return Color.Default;
+            }
+        }
+        
     }
