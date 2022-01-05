@@ -126,34 +126,24 @@ public static class Utils
             return returnValue;
         }
 
-        public static Color ConvertUserProfileColor(UserProfileColours color)
-        {
-            switch (color)
+        public static Color ToColor(this UserProfileColours color) =>
+            color switch
             {
-                case UserProfileColours.blue:
-                    return  Color.Blue;
-                
-                case UserProfileColours.gray:
-                    return Color.DarkGrey;
-                
-                case UserProfileColours.green:
-                    return Color.Green;
-                
-                case UserProfileColours.orange:
-                    return Color.Orange;
-                
-                case UserProfileColours.pink:
-                    return Color.Default;
-                
-                case UserProfileColours.purple:
-                    return Color.Purple;
-                
-                case UserProfileColours.red:
-                    return Color.Red;
-                
-                default:
-                    return Color.Default;
-            }
-        }
-        
+                UserProfileColours.blue => Color.Blue,
+
+                UserProfileColours.gray => Color.DarkGrey,
+
+                UserProfileColours.green => Color.Green,
+
+                UserProfileColours.orange => Color.Orange,
+
+                UserProfileColours.pink => Color.Default,
+
+                UserProfileColours.purple => Color.Purple,
+
+                UserProfileColours.red => Color.Red,
+
+                _ => Color.Default
+            };
+
     }

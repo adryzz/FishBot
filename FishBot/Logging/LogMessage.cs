@@ -1,0 +1,29 @@
+using NodaTime;
+
+namespace FishBot.Logging;
+
+public class LogMessage
+{
+    public Instant LogTime;
+
+    public LogType Type;
+
+    public LogLevel Severity;
+
+    public string Message;
+
+    public LogMessage(string text, LogType type = LogType.Runtime, LogLevel severity = LogLevel.Info)
+    {
+        //get time and round it up to the nearest second
+        Instant now = Instant.FromUnixTimeSeconds(SystemClock.Instance.GetCurrentInstant().ToUnixTimeSeconds());
+        Message = text;
+        LogTime = now;
+        Type = type;
+        Severity = severity;
+    }
+
+    public override string ToString()
+    {
+        return $"[{Severity.ToString().ToUpper()}] | [{Type.ToString().ToUpper()}] | {LogTime} | {Message}\n";
+    }
+}
