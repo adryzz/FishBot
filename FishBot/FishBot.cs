@@ -33,13 +33,18 @@ public class FishBot : IAsyncDisposable
     private async Task Client_MessageReceived(SocketMessage arg)
     {
         //check for insults and ask for bug report
-        if (arg.Content.Contains("fuck"))
+        if (arg.Content.Contains("fuck you"))
         {
-            var embed = new EmbedBuilder();
-            embed.WithColor(Color.Red);
-            embed.WithTitle("You seem angry...");
-            embed.WithDescription("Would you like to [submit a bug report?](https://github.com/adryzz/FishBot/issues/new)");
-            await arg.Channel.SendMessageAsync("", false, embed.Build());
+            var previous = await arg.Channel.GetMessagesAsync(arg, Direction.Before, 1).FlattenAsync();
+
+            if (previous.Count() > 0 && previous.FirstOrDefault().Content.StartsWith(Config.CmdPrefix))
+            {
+                var embed = new EmbedBuilder();
+                embed.WithColor(Color.Red);
+                embed.WithTitle("You seem angry...");
+                embed.WithDescription("Would you like to [submit a bug report?](https://github.com/adryzz/FishBot/issues/new)");
+                await arg.Channel.SendMessageAsync("", false, embed.Build());
+            }
         }
     }
 
