@@ -2,6 +2,7 @@ using Discord.Commands;
 using Discord;
 using System.Diagnostics;
 using Anilist4Net;
+using Anilist4Net.Enums;
 
 
 namespace FishBot
@@ -62,6 +63,90 @@ namespace FishBot
             {
                 var embed = new EmbedBuilder();
                 embed.Description = "User not found.";
+                embed.Color = Color.Red;
+                Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+        }
+        
+        [Command("anime", RunMode = RunMode.Async)]
+        public async Task Anime([Remainder] string name)
+        {
+            try
+            {
+                var result = await Program.Bot.AnimeClient.GetMediaBySearch(name, MediaTypes.ANIME);
+
+                if (result != null)
+                {
+                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                }
+                else
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Description = "Anime not found.";
+                    embed.Color = Color.Red;
+                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "Anime not found.";
+                embed.Color = Color.Red;
+                Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+        }
+        
+        [Command("manga", RunMode = RunMode.Async)]
+        public async Task Manga([Remainder] string name)
+        {
+            try
+            {
+                var result = await Program.Bot.AnimeClient.GetMediaBySearch(name, MediaTypes.MANGA);
+
+                if (result != null)
+                {
+                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                }
+                else
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Description = "Manga not found.";
+                    embed.Color = Color.Red;
+                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "Manga not found.";
+                embed.Color = Color.Red;
+                Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+        }
+        
+        [Command("media", RunMode = RunMode.Async)]
+        public async Task Media([Remainder] string name)
+        {
+            try
+            {
+                var result = await Program.Bot.AnimeClient.GetMediaBySearch(name);
+
+                if (result != null)
+                {
+                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                }
+                else
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Description = "Media not found.";
+                    embed.Color = Color.Red;
+                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "Media not found.";
                 embed.Color = Color.Red;
                 Context.Channel.SendMessageAsync("", false, embed.Build());
             }
