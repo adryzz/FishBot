@@ -9,8 +9,19 @@ namespace FishBot
         
         static async Task Main(string[] args)
         {
+            Console.CancelKeyPress += ConsoleOnCancelKeyPress;
             await Bot.LogInAsync();
             await Bot.StartAsync();
+            
+            while (true)
+            {
+                Console.ReadKey();
+            }
+        }
+
+        private static void ConsoleOnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+        {
+            Bot.DisposeAsync();
         }
     }
 }

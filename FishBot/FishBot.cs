@@ -73,17 +73,17 @@ public class FishBot : IAsyncDisposable
     {
         await Client.StartAsync();
         await Client.SetStatusAsync(Config.Status);
-        await Client.SetGameAsync(Config.Game, Config.Url);
+        await Client.SetActivityAsync(new Game(Config.Game, ActivityType.Watching));
     }
 
     public async Task RefreshAsync()
     {
         await Client.SetStatusAsync(Config.Status);
-        await Client.SetGameAsync(Config.Game, Config.Url);
+        await Client.SetActivityAsync(new Game(Config.Game, ActivityType.Watching));
     }
 
     public async ValueTask DisposeAsync()
     {
-        
+        await LogOutAsync();
     }
 }
