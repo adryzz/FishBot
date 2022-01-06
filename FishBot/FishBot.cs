@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Anilist4Net;
 using Discord;
 using Discord.WebSocket;
@@ -55,7 +56,7 @@ public class FishBot : IAsyncDisposable
 
     private async Task Client_Log(LogMessage arg)
     {
-        //await Program.Logger.LogAsync(new Logging.LogMessage(arg.Message, LogType.Runtime, LogLevel.Debug));
+        await Program.Logger.LogAsync(new Logging.LogMessage(arg.Message, LogType.Runtime, LogLevel.Debug));
     }
 
     private async Task Client_Connected()

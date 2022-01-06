@@ -177,7 +177,7 @@ namespace FishBot
                     embed.AddField(new EmbedFieldBuilder { Name = ":heart: Favourites", Value = result.Favourites, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":eggplant: Adult", Value = result.IsAdult, IsInline = true });
-                    //embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true });
                     await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
                 else

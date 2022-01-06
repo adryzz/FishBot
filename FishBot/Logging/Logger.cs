@@ -4,22 +4,29 @@ namespace FishBot.Logging;
 
 public class Logger : IAsyncDisposable
 {
-    public static LogLevel ConsoleVerbosity = LogLevel.Trace;
+    public static LogLevel ConsoleVerbosity = LogLevel.Info;
     
     private Channel<LogMessage> logChannel = Channel.CreateUnbounded<LogMessage>();
     
     private StreamWriter log;
-    
-    public Logger()
+
+    private Timer autoFlush;
+
+    public Logger(int timeout = 100)
     {
         log = File.AppendText("log.log");
+        autoFlush = new Timer(asyncCallback, true, timeout, timeout);
     }
-    
+
+    private async void asyncCallback(object? o)
+    {
+        await FlushAsync();
+    }
+
     public async Task LogAsync(LogMessage message)
     {
         await logChannel.Writer.WriteAsync(message);
-        await Task.Delay(50);
-        await FlushAsync();
+        //await FlushAsync();
     }
 
     public async Task LogAsync(string message)
@@ -33,17 +40,19 @@ public class Logger : IAsyncDisposable
         await foreach (LogMessage m in logChannel.Reader.ReadAllAsync())
         {
             await log.WriteAsync(m.ToString());
-            await log.FlushAsync();
-            
+
             if ((int)ConsoleVerbosity <= (int)m.Severity)//log to console only if verbosity is lower or equal
             {
                 await Console.Out.WriteLineAsync(m.ToString());
             }
         }
+        await log.FlushAsync();
+        await Console.Out.FlushAsync();
     }
 
     public async ValueTask DisposeAsync()
     {
+        await autoFlush.DisposeAsync();
         await FlushAsync();
         await log.DisposeAsync();
     }
