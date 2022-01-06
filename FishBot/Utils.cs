@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord;
 
@@ -149,6 +150,18 @@ public static class Utils
         public static string FormatMarkdown(string md)
         {
             return md.Replace("<br>\n", "\n").Replace("<br>", "\n");
+        }
+
+        public static string FormatMediaRelations(MediaRelation[] relations)
+        {
+            string formatted = "";
+            formatted += $"[{relations[0].Media.RomajiTitle}]({relations[0].Media.SiteUrl}), ";
+            formatted += $"[{relations[1].Media.RomajiTitle}]({relations[1].Media.SiteUrl}), ";
+            formatted += $"[{relations[2].Media.RomajiTitle}]({relations[2].Media.SiteUrl}), ";
+            formatted += $"[{relations[3].Media.RomajiTitle}]({relations[3].Media.SiteUrl}), ";
+            formatted += $"[{relations[4].Media.RomajiTitle}]({relations[4].Media.SiteUrl})";
+
+            return formatted;
         }
 
     }
