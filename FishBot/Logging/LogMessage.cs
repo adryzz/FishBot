@@ -29,11 +29,12 @@ public class LogMessage
     {
         if (Colored)
         {
-            return $"{Severity.GetColor()}[{Severity.ToString().ToUpper()}]{Reset} | [{Type.ToString().ToUpper()}] | {LogTime} | {Message}\n";
+            return $"{Severity.GetColor()}[{Severity.ToString().ToUpper()}]{Reset} | {Type.GetColor()}[{Type.ToString().ToUpper()}]{Reset} | {Grey}{LogTime}{Reset} | {Message}\n";
         }
         
         return $"[{Severity.ToString().ToUpper()}] | [{Type.ToString().ToUpper()}] | {LogTime} | {Message}\n";
     }
 
     private const string Reset = "\u001b[0m";
+    private const string Grey = "\u001b[0m";
 }

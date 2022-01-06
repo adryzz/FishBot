@@ -202,5 +202,18 @@ public static class Utils
             SeverityColors.TryGetValue(level, out string code);
             return code;
         }
-
+        
+        private static readonly Dictionary<LogType, string> TypeColors = new Dictionary<LogType, string>()
+        {
+            {LogType.Runtime, "\u001b[37m"},//white
+            {LogType.Commands, "\u001b[36m"},//cyan
+            {LogType.Api, "\u001b[33m"},//yellow
+            {LogType.Network, "\u001b[35m"},//red
+        };
+        
+        public static string GetColor(this LogType type)
+        {
+            TypeColors.TryGetValue(type, out string code);
+            return code;
+        }
     }
