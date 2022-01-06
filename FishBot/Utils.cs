@@ -146,4 +146,9 @@ public static class Utils
                 _ => Color.Default
             };
 
+        public static string FormatMarkdown(string md)
+        {
+            return md.Replace("<br>", "\n");
+        }
+
     }

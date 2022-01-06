@@ -7,7 +7,7 @@ namespace FishBot
     {
         public static FishBot Bot = new FishBot();
 
-        public static Logger Logger;
+        public static Logger Logger = new Logger();
         
         static async Task Main(string[] args)
         {

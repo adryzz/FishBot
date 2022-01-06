@@ -57,14 +57,14 @@ namespace FishBot
                 embed.Author = new EmbedAuthorBuilder {Name = user.Name, Url = user.SiteUrl, IconUrl = user.MediumAvatar };
                 embed.Color = user.ProfileColour.ToColor();
                 //embed.Description;
-                Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
             }
             catch (Exception e)
             {
                 var embed = new EmbedBuilder();
                 embed.Description = "User not found.";
                 embed.Color = Color.Red;
-                Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
             }
         }
         
@@ -77,14 +77,14 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await Context.Channel.SendMessageAsync(result.SiteUrl);
                 }
                 else
                 {
                     var embed = new EmbedBuilder();
                     embed.Description = "Anime not found.";
                     embed.Color = Color.Red;
-                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
             }
             catch (Exception e)
@@ -92,7 +92,7 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
-                Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
             }
         }
         
@@ -105,14 +105,14 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await Context.Channel.SendMessageAsync(result.SiteUrl);
                 }
                 else
                 {
                     var embed = new EmbedBuilder();
                     embed.Description = "Manga not found.";
                     embed.Color = Color.Red;
-                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
             }
             catch (Exception e)
@@ -120,7 +120,7 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
-                Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
             }
         }
         
@@ -133,14 +133,14 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await Context.Channel.SendMessageAsync(result.SiteUrl);
                 }
                 else
                 {
                     var embed = new EmbedBuilder();
                     embed.Description = "Media not found.";
                     embed.Color = Color.Red;
-                    Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
             }
             catch (Exception e)
@@ -148,7 +148,42 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Media not found.";
                 embed.Color = Color.Red;
-                Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+        }
+        
+        [Command("animeinfo", RunMode = RunMode.Async)]
+        public async Task AnimeInfo([Remainder] string name)
+        {
+            try
+            {
+                var result = await Program.Bot.AnimeClient.GetMediaBySearch(name, MediaTypes.ANIME);
+
+                if (result != null)
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Url = result.SiteUrl;
+                    embed.Title = result.RomajiTitle;
+                    embed.Description = Utils.FormatMarkdown(result.DescriptionMd);
+                    embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100" });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Concat(result.Genres, ", ") });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":arrow_forward: Episodes", Value = result.Episodes });
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+                else
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Description = "Anime not found.";
+                    embed.Color = Color.Red;
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "Anime not found.";
+                embed.Color = Color.Red;
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
             }
         }
     }

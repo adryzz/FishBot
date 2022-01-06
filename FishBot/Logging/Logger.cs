@@ -4,7 +4,7 @@ namespace FishBot.Logging;
 
 public class Logger : IAsyncDisposable
 {
-    public static LogLevel ConsoleVerbosity = LogLevel.Info;
+    public static LogLevel ConsoleVerbosity = LogLevel.Trace;
     
     private Channel<LogMessage> logChannel = Channel.CreateUnbounded<LogMessage>();
     
@@ -22,7 +22,7 @@ public class Logger : IAsyncDisposable
         await FlushAsync();
     }
 
-    public async Task Log(string message)
+    public async Task LogAsync(string message)
     {
         LogMessage m = new LogMessage(message);
         await LogAsync(m);
