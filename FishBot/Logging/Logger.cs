@@ -33,6 +33,7 @@ public class Logger : IAsyncDisposable
         await foreach (LogMessage m in logChannel.Reader.ReadAllAsync())
         {
             await log.WriteAsync(m.ToString());
+            await log.FlushAsync();
             
             if ((int)ConsoleVerbosity <= (int)m.Severity)//log to console only if verbosity is lower or equal
             {

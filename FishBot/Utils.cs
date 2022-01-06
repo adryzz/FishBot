@@ -1,9 +1,11 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
 using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord;
+using FishBot.Logging;
 
 namespace FishBot;
 
@@ -147,9 +149,24 @@ public static class Utils
                 _ => Color.Default
             };
 
+        public static readonly Dictionary<string, string> Replace = new Dictionary<string, string>
+        {
+            {"<br>\n", "\n"},
+            {"<br>", "\n"},
+            {"<i>", "*"},
+            {"</i>", "*"}
+        };
+
+        private static StringBuilder builder = new StringBuilder();
         public static string FormatMarkdown(string md)
         {
-            return md.Replace("<br>\n", "\n").Replace("<br>", "\n");
+            builder.Clear();
+            builder.Append(md);
+            foreach (var pair in Replace)
+            {
+                builder.Replace(pair.Key, pair.Value);
+            }
+            return builder.ToString();
         }
 
         public static string FormatMediaRelations(MediaRelation[] relations)
@@ -162,6 +179,28 @@ public static class Utils
             formatted += $"[{relations[4].Media.RomajiTitle}]({relations[4].Media.SiteUrl})";
 
             return formatted;
+        }
+
+        public static async Task Log(this Exception e, LogType type = LogType.Commands)
+        {
+            await Program.Logger.LogAsync(new Logging.LogMessage(e.Message, LogType.Commands, LogLevel.Error));
+            await Program.Logger.LogAsync(new Logging.LogMessage(e.StackTrace, LogType.Commands, LogLevel.Trace));
+        }
+        
+        private static readonly Dictionary<LogLevel, string> SeverityColors = new Dictionary<LogLevel, string>()
+        {
+            {LogLevel.Trace, "\u001b[0m"},//grey
+            {LogLevel.Debug, "\u001b[37m"},//white
+            {LogLevel.Info, "\u001b[36m"},//cyan
+            {LogLevel.Warning, "\u001b[33m"},//yellow
+            {LogLevel.Error, "\u001b[31m"},//red
+            {LogLevel.Fatal, "\u001b[35m"}//magenta
+        };
+        
+        public static string GetColor(this LogLevel level)
+        {
+            SeverityColors.TryGetValue(level, out string code);
+            return code;
         }
 
     }

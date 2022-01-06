@@ -4,15 +4,17 @@ namespace FishBot.Logging;
 
 public class LogMessage
 {
-    public Instant LogTime;
+    public Instant LogTime { get; }
 
-    public LogType Type;
+    public LogType Type { get; set; }
 
-    public LogLevel Severity;
+    public LogLevel Severity { get; set; }
 
-    public string Message;
+    public string Message { get; set; }
 
-    public LogMessage(string text, LogType type = LogType.Runtime, LogLevel severity = LogLevel.Info)
+    public bool Colored { get; set; }
+
+    public LogMessage(string text, LogType type = LogType.Runtime, LogLevel severity = LogLevel.Info, bool colored = true)
     {
         //get time and round it up to the nearest second
         Instant now = Instant.FromUnixTimeSeconds(SystemClock.Instance.GetCurrentInstant().ToUnixTimeSeconds());
@@ -20,10 +22,18 @@ public class LogMessage
         LogTime = now;
         Type = type;
         Severity = severity;
+        Colored = colored;
     }
 
     public override string ToString()
     {
+        if (Colored)
+        {
+            return $"{Severity.GetColor()}[{Severity.ToString().ToUpper()}]{Reset} | [{Type.ToString().ToUpper()}] | {LogTime} | {Message}\n";
+        }
+        
         return $"[{Severity.ToString().ToUpper()}] | [{Type.ToString().ToUpper()}] | {LogTime} | {Message}\n";
     }
+
+    private const string Reset = "\u001b[0m";
 }

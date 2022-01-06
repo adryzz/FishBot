@@ -66,8 +66,7 @@ namespace FishBot
                 embed.Description = "User not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
         
@@ -96,8 +95,7 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
         
@@ -126,8 +124,7 @@ namespace FishBot
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
         
@@ -156,8 +153,7 @@ namespace FishBot
                 embed.Description = "Media not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
         
@@ -176,7 +172,7 @@ namespace FishBot
                     embed.Description = Utils.FormatMarkdown(result.DescriptionMd);
                     embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100", IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres), IsInline = true });
-                    embed.AddField(new EmbedFieldBuilder { Name = ":arrow_forward: Episodes", Value = result.Episodes });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":clapper: Episodes", Value = result.Episodes });
                     embed.AddField(new EmbedFieldBuilder { Name = ":clock10: Duration", Value = $"{result.Duration}min/episode", IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":heart: Favourites", Value = result.Favourites, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
@@ -198,8 +194,7 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
         
@@ -240,8 +235,7 @@ namespace FishBot
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
-                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+                await e.Log();
             }
         }
     }
