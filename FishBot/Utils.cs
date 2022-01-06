@@ -148,7 +148,7 @@ public static class Utils
 
         public static string FormatMarkdown(string md)
         {
-            return md.Replace("<br>", "\n");
+            return md.Replace("<br>\n", "\n").Replace("<br>", "\n");
         }
 
     }

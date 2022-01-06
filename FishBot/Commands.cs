@@ -166,7 +166,7 @@ namespace FishBot
                     embed.Title = result.RomajiTitle;
                     embed.Description = Utils.FormatMarkdown(result.DescriptionMd);
                     embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100" });
-                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Concat(result.Genres, ", ") });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres) });
                     embed.AddField(new EmbedFieldBuilder { Name = ":arrow_forward: Episodes", Value = result.Episodes });
                     await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
