@@ -3,6 +3,7 @@ using Discord;
 using System.Diagnostics;
 using Anilist4Net;
 using Anilist4Net.Enums;
+using FishBot.Logging;
 
 
 namespace FishBot
@@ -65,6 +66,8 @@ namespace FishBot
                 embed.Description = "User not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
             }
         }
         
@@ -93,6 +96,8 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
             }
         }
         
@@ -121,6 +126,8 @@ namespace FishBot
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
             }
         }
         
@@ -149,6 +156,8 @@ namespace FishBot
                 embed.Description = "Media not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
             }
         }
         
@@ -165,9 +174,14 @@ namespace FishBot
                     embed.Url = result.SiteUrl;
                     embed.Title = result.RomajiTitle;
                     embed.Description = Utils.FormatMarkdown(result.DescriptionMd);
-                    embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100" });
-                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres) });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100", IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres), IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":arrow_forward: Episodes", Value = result.Episodes });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":clock10: Duration", Value = $"{result.Duration}min/episode", IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":heart: Favourites", Value = result.Favourites, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":eggplant: Adult", Value = result.IsAdult, IsInline = true });
+                    //embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true });
                     await Context.Channel.SendMessageAsync("", false, embed.Build());
                 }
                 else
@@ -184,6 +198,50 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
+            }
+        }
+        
+        [Command("mangainfo", RunMode = RunMode.Async)]
+        public async Task MangaInfo([Remainder] string name)
+        {
+            try
+            {
+                var result = await Program.Bot.AnimeClient.GetMediaBySearch(name, MediaTypes.MANGA);
+
+                if (result != null)
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Url = result.SiteUrl;
+                    embed.Title = result.RomajiTitle;
+                    embed.Description = Utils.FormatMarkdown(result.DescriptionMd);
+                    embed.AddField(new EmbedFieldBuilder { Name = ":star: Rating", Value = $"{result.AverageScore}/100", IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres), IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":books: Volumes", Value = result.Volumes, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":bookmark: Chapters", Value = result.Chapters, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":heart: Favourites", Value = result.Favourites, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":eggplant: Adult", Value = result.IsAdult, IsInline = true });
+                    //embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true});
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+                else
+                {
+                    var embed = new EmbedBuilder();
+                    embed.Description = "Manga not found.";
+                    embed.Color = Color.Red;
+                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                }
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder();
+                embed.Description = "Manga not found.";
+                embed.Color = Color.Red;
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.Message, LogType.Commands, LogLevel.Debug));
+                await Program.Logger.LogAsync(new Logging.LogMessage( e.StackTrace, LogType.Commands, LogLevel.Trace));
             }
         }
     }
