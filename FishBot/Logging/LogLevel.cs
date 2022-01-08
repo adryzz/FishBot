@@ -2,10 +2,10 @@ namespace FishBot.Logging;
 
 public enum LogLevel
 {
-    Trace,
-    Debug,
-    Info,
-    Warning,
+    Fatal,
     Error,
-    Fatal
+    Warning,
+    Info,
+    Debug,
+    Trace
 }

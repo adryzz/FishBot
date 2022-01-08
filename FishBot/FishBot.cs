@@ -40,7 +40,7 @@ public class FishBot : IAsyncDisposable
 
     private async Task Client_Log(LogMessage arg)
     {
-        await Program.Logger.LogAsync(new Logging.LogMessage(arg.Message, LogType.Runtime, LogLevel.Debug));
+        await Program.Logger.LogAsync(new Logging.LogMessage(arg.Message, LogType.Runtime, (LogLevel)(int)arg.Severity));
     }
 
     private async Task Client_Connected()
