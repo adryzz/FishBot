@@ -181,7 +181,7 @@ public static class Utils
             return formatted;
         }
 
-        public static async Task Log(this Exception e, LogType type = LogType.Commands)
+        public static async Task LogAsync(this Exception e, LogType type = LogType.Commands)
         {
             await Program.Logger.LogAsync(new Logging.LogMessage(e.Message, LogType.Commands, LogLevel.Error));
             await Program.Logger.LogAsync(new Logging.LogMessage(e.StackTrace, LogType.Commands, LogLevel.Trace));

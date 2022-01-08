@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord.Interactions;
-using FishBot.Logging;
+using FishBot.LogAsyncging;
 
 
 namespace FishBot
@@ -66,7 +66,7 @@ namespace FishBot
                 embed.Description = "User not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
         
@@ -95,7 +95,7 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
         
@@ -124,7 +124,7 @@ namespace FishBot
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
         
@@ -153,7 +153,7 @@ namespace FishBot
                 embed.Description = "Media not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
         
@@ -194,7 +194,7 @@ namespace FishBot
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
         
@@ -235,7 +235,7 @@ namespace FishBot
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
                 await RespondAsync(embed: embed.Build());
-                await e.Log();
+                await e.LogAsync();
             }
         }
     }

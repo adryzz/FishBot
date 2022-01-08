@@ -22,7 +22,7 @@ namespace FishBot
 
         private async Task ClientOnReady()
         {
-            await Service.RegisterCommandsToGuildAsync(528487200581615616);
+            await Service.RegisterCommandsGloballyAsync();
         }
 
         private async Task HandleCommandAsync(SocketInteraction s)
