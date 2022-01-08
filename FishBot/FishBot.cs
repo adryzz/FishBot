@@ -30,7 +30,7 @@ public class FishBot : IAsyncDisposable
         Client = new DiscordSocketClient(new DiscordSocketConfig
         {
             LogLevel = LogSeverity.Verbose,
-            GatewayIntents = GatewayIntents.None
+            GatewayIntents = GatewayIntents.AllUnprivileged
         });
         Client.Log += Client_Log;
         Client.Connected += Client_Connected;

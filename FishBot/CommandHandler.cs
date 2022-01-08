@@ -28,7 +28,6 @@ namespace FishBot
         private async Task HandleCommandAsync(SocketInteraction s)
         {
             var context = new SocketInteractionContext(Client, s);
-            await s.RespondAsync("a");
             await Service.ExecuteCommandAsync(context, null);
         }
     }
