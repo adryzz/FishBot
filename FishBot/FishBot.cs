@@ -30,30 +30,12 @@ public class FishBot : IAsyncDisposable
 
         Client = new DiscordSocketClient(new DiscordSocketConfig
         {
-            LogLevel = LogSeverity.Verbose
+            LogLevel = LogSeverity.Verbose,
+            GatewayIntents = GatewayIntents.None
         });
         Client.Log += Client_Log;
         Client.Connected += Client_Connected;
         Client.Disconnected += Client_Disconnected;
-        Client.MessageReceived += Client_MessageReceived;
-    }
-
-    private async Task Client_MessageReceived(SocketMessage arg)
-    {
-        //check for insults and ask for bug report
-        if (arg.Content.Contains("fuck you"))
-        {
-            var previous = await arg.Channel.GetMessagesAsync(arg, Direction.Before, 1).FlattenAsync();
-
-            if (previous.Count() > 0 && previous.FirstOrDefault().Content.StartsWith(Config.CmdPrefix))
-            {
-                var embed = new EmbedBuilder();
-                embed.WithColor(Color.Red);
-                embed.WithTitle("You seem angry...");
-                embed.WithDescription("Would you like to [submit a bug report?](https://github.com/adryzz/FishBot/issues/new)");
-                await arg.Channel.SendMessageAsync("", false, embed.Build());
-            }
-        }
     }
 
     private async Task Client_Log(LogMessage arg)

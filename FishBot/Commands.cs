@@ -8,7 +8,7 @@ using FishBot.Logging;
 
 namespace FishBot
 {
-    public class SlashCommands : InteractionModuleBase
+    public class Commands : InteractionModuleBase
     {
         [SlashCommand("help", "Gets help", false, RunMode.Async)]
         public async Task Help()
