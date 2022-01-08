@@ -79,7 +79,7 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    await Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await RespondAsync(result.SiteUrl);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    await Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await RespondAsync(result.SiteUrl);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace FishBot
 
                 if (result != null)
                 {
-                    await Context.Channel.SendMessageAsync(result.SiteUrl);
+                    await RespondAsync(result.SiteUrl);
                 }
                 else
                 {
