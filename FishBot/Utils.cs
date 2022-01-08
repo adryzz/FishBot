@@ -154,7 +154,9 @@ public static class Utils
             {"<br>\n", "\n"},
             {"<br>", "\n"},
             {"<i>", "*"},
-            {"</i>", "*"}
+            {"</i>", "*"},
+            {"<b>", "**"},
+            {"</b>", "**"}
         };
 
         private static StringBuilder builder = new StringBuilder();
