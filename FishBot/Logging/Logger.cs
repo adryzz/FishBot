@@ -38,7 +38,7 @@ public class Logger : IAsyncDisposable
 
     public async Task FlushAsync()
     {
-        await foreach (LogMessage m in logChannel.Reader.ReadAllAsync())
+        await foreach (LogMessage m in ReadAvailableLogsAsync())
         {
             await log.WriteAsync(m.ToString());
 
@@ -49,6 +49,14 @@ public class Logger : IAsyncDisposable
         }
         await log.FlushAsync();
         await Console.Out.FlushAsync();
+    }
+
+    private async IAsyncEnumerable<LogMessage> ReadAvailableLogsAsync()
+    {
+        while (logChannel.Reader.Count > 0)
+        {
+            yield return await logChannel.Reader.ReadAsync();
+        }
     }
 
     public async ValueTask DisposeAsync()
