@@ -16,7 +16,7 @@ namespace FishBot
             Client = client;
             Service = new InteractionService(Client, new InteractionServiceConfig { DefaultRunMode = RunMode.Async });
             await Service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
-            Client.SlashCommandExecuted += HandleCommandAsync;
+            Client.InteractionCreated += HandleCommandAsync;
             Client.Ready += ClientOnReady;
         }
 
@@ -25,9 +25,10 @@ namespace FishBot
             await Service.RegisterCommandsToGuildAsync(528487200581615616);
         }
 
-        private async Task HandleCommandAsync(SocketSlashCommand s)
+        private async Task HandleCommandAsync(SocketInteraction s)
         {
-            var context = new InteractionContext(Client, s, s.User, s.Channel);
+            var context = new SocketInteractionContext(Client, s);
+            await s.RespondAsync("a");
             await Service.ExecuteCommandAsync(context, null);
         }
     }

@@ -20,7 +20,8 @@ public class Logger : IAsyncDisposable
 
     private async void asyncCallback(object? o)
     {
-        await FlushAsync();
+        if (logChannel.Reader.Count > 0)
+            await FlushAsync();
     }
 
     public async Task LogAsync(LogMessage message)
@@ -41,7 +42,7 @@ public class Logger : IAsyncDisposable
         {
             await log.WriteAsync(m.ToString());
 
-            if ((int)ConsoleVerbosity >= (int)m.Severity)//log to console only if verbosity is lower or equal
+            if ((int)ConsoleVerbosity >= (int)m.Severity)
             {
                 await Console.Out.WriteLineAsync(m.ToString());
             }
