@@ -198,7 +198,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("mangainfo", "gets additional information about an AniList anime")]
+        [SlashCommand("mangainfo", "gets additional information about an AniList manga")]
         public async Task MangaInfo(string name)
         {
             try
