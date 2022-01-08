@@ -41,7 +41,7 @@ public class Logger : IAsyncDisposable
         {
             await log.WriteAsync(m.ToString());
 
-            if ((int)ConsoleVerbosity <= (int)m.Severity)//log to console only if verbosity is lower or equal
+            if ((int)ConsoleVerbosity >= (int)m.Severity)//log to console only if verbosity is lower or equal
             {
                 await Console.Out.WriteLineAsync(m.ToString());
             }
