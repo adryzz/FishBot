@@ -9,7 +9,7 @@ namespace FishBot
 
         public static Logger Logger = new Logger();
         
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
             await Bot.LogInAsync();

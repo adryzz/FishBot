@@ -15,10 +15,10 @@ public class Logger : IAsyncDisposable
     public Logger(int timeout = 100)
     {
         log = File.AppendText("log.log");
-        autoFlush = new Timer(asyncCallback, true, timeout, timeout);
+        autoFlush = new Timer(_asyncCallback, true, timeout, timeout);
     }
 
-    private async void asyncCallback(object? o)
+    private async void _asyncCallback(object? o)
     {
         if (logChannel.Reader.Count > 0)
             await FlushAsync();

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Anilist4Net;
 using Discord;
 using Discord.WebSocket;

@@ -1,4 +1,3 @@
-using Discord.Commands;
 using Discord.WebSocket;
 using System.Reflection;
 using Discord.Interactions;
@@ -8,27 +7,27 @@ namespace FishBot
 {
     public class CommandHandler
     {
-        DiscordSocketClient Client;
-        InteractionService Service;
+        private DiscordSocketClient? _client;
+        private InteractionService? _service;
 
-        public async Task InitialiseAsync(DiscordSocketClient client)
+        public async Task InitialiseAsync(DiscordSocketClient socketClient)
         {
-            Client = client;
-            Service = new InteractionService(Client, new InteractionServiceConfig { DefaultRunMode = RunMode.Async });
-            await Service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
-            Client.InteractionCreated += HandleCommandAsync;
-            Client.Ready += ClientOnReady;
+            _client = socketClient;
+            _service = new InteractionService(_client, new InteractionServiceConfig { DefaultRunMode = RunMode.Async });
+            await _service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+            _client.InteractionCreated += HandleCommandAsync;
+            _client.Ready += ClientOnReady;
         }
 
         private async Task ClientOnReady()
         {
-            await Service.RegisterCommandsGloballyAsync();
+            await _service.RegisterCommandsGloballyAsync();
         }
 
         private async Task HandleCommandAsync(SocketInteraction s)
         {
-            var context = new SocketInteractionContext(Client, s);
-            await Service.ExecuteCommandAsync(context, null);
+            var context = new SocketInteractionContext(_client, s);
+            await _service.ExecuteCommandAsync(context, null);
         }
     }
 }

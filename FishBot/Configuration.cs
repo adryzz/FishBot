@@ -18,7 +18,7 @@ public class Configuration
 
     public static Configuration FromFile(string fileName)
     {
-        return JsonSerializer.Deserialize<Configuration>(File.ReadAllText(fileName));
+        return JsonSerializer.Deserialize<Configuration>(File.ReadAllText(fileName)) ?? throw new JsonException("The configuration wasn't in the correct format.");
     }
 
     public void Save(string fileName)

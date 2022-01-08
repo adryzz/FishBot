@@ -13,18 +13,18 @@ public static class Utils
     {
         public static async Task<long?> PingDnsAsync()
         {
-            List<NetworkInterface> Interfaces = new List<NetworkInterface>();
+            List<NetworkInterface> interfaces = new List<NetworkInterface>();
             foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
             {
                 if (nic.OperationalStatus == OperationalStatus.Up)
                 {
-                    Interfaces.Add(nic);
+                    interfaces.Add(nic);
                 }
             }
 
 
-            NetworkInterface result = null;
-            foreach (NetworkInterface nic in Interfaces)
+            NetworkInterface? result = null;
+            foreach (NetworkInterface nic in interfaces)
             {
                 if (result == null)
                 {
@@ -32,11 +32,8 @@ public static class Utils
                 }
                 else
                 {
-                    if (nic.GetIPProperties().GetIPv4Properties() != null)
-                    {
-                        if (nic.GetIPProperties().GetIPv4Properties().Index < result.GetIPProperties().GetIPv4Properties().Index)
+                    if (nic.GetIPProperties().GetIPv4Properties().Index < result.GetIPProperties().GetIPv4Properties().Index)
                             result = nic;
-                    }
                 }
             }
             if (result == null)
@@ -52,31 +49,19 @@ public static class Utils
         public static async Task<long?> PingAsync(string address, int count = 4)
         {
             PingOptions pingOptions = new PingOptions(128, true);
-
-            //create a new ping instance
+            
             Ping ping = new Ping();
-
-            //32 byte buffer (create empty)
+            
             byte[] buffer = new byte[32];
 
             long?[] pings = new long?[count];
-
-            //here we will ping the host numping times (standard)
+            
             for (int i = 0; i < count; i++)
             {
                 try
                 {
-                    //send the ping numping times to the host and record the returned data.
-                    //The Send() method expects numping items:
-                    //1) The IPAddress we are pinging
-                    //2) The timeout value
-                    //3) A buffer (our byte array)
-                    //numping) PingOptions
                     PingReply pingReply = await ping.SendPingAsync(address, 1000, buffer, pingOptions);
-
-                    //make sure we dont have a null reply
-                    if (!(pingReply == null))
-                    {
+                    
                         switch (pingReply.Status)
                         {
                             case IPStatus.Success:
@@ -89,20 +74,11 @@ public static class Utils
                                 pings[i] = null;
                                 break;
                         }
-                    }
-                    else
-                    {
-                        pings[i] = null;
-                    }
-
                 }
-                catch (PingException ex)
+                catch (Exception ex)
                 {
                     pings[i] = null;
-                }
-                catch (SocketException ex)
-                {
-                    pings[i] = null;
+                    await ex.LogAsync();
                 }
             }
             int notnull = 0;
@@ -110,17 +86,15 @@ public static class Utils
 
             for (int i = 0; i < count; i++)
             {
-                if (pings[i].HasValue)
+                if (!pings[i].HasValue) continue;
+                notnull++;
+                if (returnValue.HasValue)
                 {
-                    notnull++;
-                    if (returnValue.HasValue)
-                    {
-                        returnValue += pings[i].Value;
-                    }
-                    else
-                    {
-                        returnValue = pings[i].Value;
-                    }
+                    returnValue += pings[i].Value;
+                }
+                else
+                {
+                    returnValue = pings[i].Value;
                 }
             }
             returnValue /= notnull;
@@ -129,85 +103,8 @@ public static class Utils
             return returnValue;
         }
 
-        public static async Task<long?> PingAsync(this IPAddress address, int count = 4)
-        {
-            PingOptions pingOptions = new PingOptions(128, true);
-
-            //create a new ping instance
-            Ping ping = new Ping();
-
-            //32 byte buffer (create empty)
-            byte[] buffer = new byte[32];
-
-            long?[] pings = new long?[count];
-
-            //here we will ping the host numping times (standard)
-            for (int i = 0; i < count; i++)
-            {
-                try
-                {
-                    //send the ping numping times to the host and record the returned data.
-                    //The Send() method expects numping items:
-                    //1) The IPAddress we are pinging
-                    //2) The timeout value
-                    //3) A buffer (our byte array)
-                    //numping) PingOptions
-                    PingReply pingReply = await ping.SendPingAsync(address, 1000, buffer, pingOptions);
-
-                    //make sure we dont have a null reply
-                    if (!(pingReply == null))
-                    {
-                        switch (pingReply.Status)
-                        {
-                            case IPStatus.Success:
-                                pings[i] = pingReply.RoundtripTime;
-                                break;
-                            case IPStatus.TimedOut:
-                                pings[i] = null;
-                                break;
-                            default:
-                                pings[i] = null;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        pings[i] = null;
-                    }
-
-                }
-                catch (PingException ex)
-                {
-                    pings[i] = null;
-                }
-                catch (SocketException ex)
-                {
-                    pings[i] = null;
-                }
-            }
-            int notnull = 0;
-            long? returnValue = null;
-
-            for (int i = 0; i < count; i++)
-            {
-                if (pings[i].HasValue)
-                {
-                    notnull++;
-                    if (returnValue.HasValue)
-                    {
-                        returnValue += pings[i].Value;
-                    }
-                    else
-                    {
-                        returnValue = pings[i].Value;
-                    }
-                }
-            }
-            returnValue /= notnull;
-
-            //return the message
-            return returnValue;
-        }
+        public static async Task<long?> PingAsync(this IPAddress address, int count = 4) =>
+            await PingAsync(address.ToString(), count);
 
         public static Color ToColor(this UserProfileColours color) =>
             color switch
@@ -266,7 +163,7 @@ public static class Utils
         public static async Task LogAsync(this Exception e, LogType type = LogType.Commands)
         {
             await Program.Logger.LogAsync(new Logging.LogMessage(e.Message, LogType.Commands, LogLevel.Error));
-            await Program.Logger.LogAsync(new Logging.LogMessage(e.StackTrace, LogType.Commands, LogLevel.Trace));
+            await Program.Logger.LogAsync(new Logging.LogMessage(e.StackTrace ?? "Stacktrace was null.", LogType.Commands, LogLevel.Trace));
         }
         
         private static readonly Dictionary<LogLevel, string> SeverityColors = new Dictionary<LogLevel, string>()
@@ -281,8 +178,8 @@ public static class Utils
         
         public static string GetColor(this LogLevel level)
         {
-            SeverityColors.TryGetValue(level, out string code);
-            return code;
+            SeverityColors.TryGetValue(level, out string? code);
+            return code ?? String.Empty;
         }
         
         private static readonly Dictionary<LogType, string> TypeColors = new Dictionary<LogType, string>()
@@ -295,7 +192,7 @@ public static class Utils
         
         public static string GetColor(this LogType type)
         {
-            TypeColors.TryGetValue(type, out string code);
-            return code;
+            TypeColors.TryGetValue(type, out string? code);
+            return code ?? String.Empty;
         }
     }

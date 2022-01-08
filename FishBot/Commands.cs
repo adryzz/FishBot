@@ -1,10 +1,8 @@
 using Discord;
 using System.Diagnostics;
-using System.Net;
 using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord.Interactions;
-using FishBot.Logging;
 
 
 namespace FishBot
