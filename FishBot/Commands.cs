@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord.Interactions;
-using FishBot.LogAsyncging;
+using FishBot.Logging;
 
 
 namespace FishBot
