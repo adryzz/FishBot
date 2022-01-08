@@ -16,6 +16,11 @@ namespace FishBot
             Service = new InteractionService(Client);
             await Service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
             Client.SlashCommandExecuted += HandleCommandAsync;
+            Client.Ready += ClientOnReady;
+        }
+
+        private async Task ClientOnReady()
+        {
             await Service.RegisterCommandsGloballyAsync();
         }
 
