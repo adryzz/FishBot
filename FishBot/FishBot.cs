@@ -55,7 +55,7 @@ public class FishBot : IAsyncDisposable
 
     public async Task LogInAsync()
     {
-        if (Config.Token == "" || Config.Token == null) { throw new InvalidOperationException("The token isn't present in the configuration file."); }
+        if (string.IsNullOrEmpty(Config.Token)) { throw new InvalidOperationException("The token isn't present in the configuration file."); }
         await Client.LoginAsync(TokenType.Bot, Config.Token);
         Handler = new CommandHandler();
         await Handler.InitialiseAsync(Client);
