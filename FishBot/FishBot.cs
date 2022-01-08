@@ -24,7 +24,6 @@ public class FishBot : IAsyncDisposable
         }
         else
         {
-            Config = new Configuration();
             Config.Save("config.json");
         }
 
