@@ -18,9 +18,9 @@ namespace FishBot
             await Task.Delay(-1);
         }
 
-        private static void ConsoleOnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+        private static async void ConsoleOnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
-            Bot.DisposeAsync();
+            await Bot.DisposeAsync();
         }
     }
 }
