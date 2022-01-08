@@ -13,6 +13,8 @@ public class FishBot : IAsyncDisposable
     public Configuration Config = new Configuration();
     protected CommandHandler? Handler = new CommandHandler();
 
+    public int Latency => Client.Latency;
+
     public Client AnimeClient = new Client();
     public FishBot()
     {

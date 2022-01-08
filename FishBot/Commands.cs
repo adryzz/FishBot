@@ -1,34 +1,34 @@
-using Discord.Commands;
 using Discord;
 using System.Diagnostics;
 using Anilist4Net;
 using Anilist4Net.Enums;
+using Discord.Interactions;
 using FishBot.Logging;
 
 
 namespace FishBot
 {
-    public class Commands : ModuleBase<SocketCommandContext>
+    public class SlashCommands : InteractionModuleBase
     {
-        [Command("help", RunMode = RunMode.Async)]
+        [SlashCommand("help", "Gets help", false, RunMode.Async)]
         public async Task Help()
         {
             var embed = new EmbedBuilder();
             embed.WithColor(Program.Bot.Config.Color.R, Program.Bot.Config.Color.G, Program.Bot.Config.Color.B);
-            embed.WithTitle("AdryBot");
+            embed.WithTitle("FishBot");
             embed.WithUrl("https://github.com/adryzz/fishbot/");
-            embed.WithDescription($"Adryzz's bot\nDo **{Program.Bot.Config.CmdPrefix}commands** to see all the available commands!");
+            embed.WithDescription($"fuck you");
             embed.WithCurrentTimestamp();
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await RespondAsync(embed: embed.Build());
         }
         
         
-        [Command("ping", RunMode = RunMode.Async)]
+        [SlashCommand("ping", "gets the response times of the server", false, RunMode.Async)]
         public async Task Ping()
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            int latency = Context.Client.Latency;
+            int latency = Program.Bot.Latency;
             long? ping = await Utils.PingDnsAsync();
             string text;
             watch.Stop();
@@ -45,10 +45,10 @@ namespace FishBot
             embed.WithTitle("Pong!");
             embed.WithDescription(text);
             embed.WithCurrentTimestamp();
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await RespondAsync(embed: embed.Build());
         }
 
-        [Command("user", RunMode = RunMode.Async)]
+        [SlashCommand("user", "gets info about an AniList user", false, RunMode.Async)]
         public async Task User(string? userName = null)
         {
             try
@@ -58,20 +58,20 @@ namespace FishBot
                 embed.Author = new EmbedAuthorBuilder {Name = user.Name, Url = user.SiteUrl, IconUrl = user.MediumAvatar };
                 embed.Color = user.ProfileColour.ToColor();
                 //embed.Description;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
             }
             catch (Exception e)
             {
                 var embed = new EmbedBuilder();
                 embed.Description = "User not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
         
-        [Command("anime", RunMode = RunMode.Async)]
-        public async Task Anime([Remainder] string name)
+        [SlashCommand("anime", "searches an AniList anime", false, RunMode.Async)]
+        public async Task Anime(string name)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace FishBot
                     var embed = new EmbedBuilder();
                     embed.Description = "Anime not found.";
                     embed.Color = Color.Red;
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
             }
             catch (Exception e)
@@ -94,13 +94,13 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
         
-        [Command("manga", RunMode = RunMode.Async)]
-        public async Task Manga([Remainder] string name)
+        [SlashCommand("manga", "searches an AniList manga", false, RunMode.Async)]
+        public async Task Manga(string name)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace FishBot
                     var embed = new EmbedBuilder();
                     embed.Description = "Manga not found.";
                     embed.Color = Color.Red;
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
             }
             catch (Exception e)
@@ -123,13 +123,13 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
         
-        [Command("media", RunMode = RunMode.Async)]
-        public async Task Media([Remainder] string name)
+        [SlashCommand("media", "searches an AniList media", false, RunMode.Async)]
+        public async Task Media(string name)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace FishBot
                     var embed = new EmbedBuilder();
                     embed.Description = "Media not found.";
                     embed.Color = Color.Red;
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
             }
             catch (Exception e)
@@ -152,13 +152,13 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Media not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
         
-        [Command("animeinfo", RunMode = RunMode.Async)]
-        public async Task AnimeInfo([Remainder] string name)
+        [SlashCommand("animeinfo", "gets additional information about an AniList anime", false, RunMode.Async)]
+        public async Task AnimeInfo(string name)
         {
             try
             {
@@ -178,14 +178,14 @@ namespace FishBot
                     embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":eggplant: Adult", Value = result.IsAdult, IsInline = true });
                     //embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true });
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
                 else
                 {
                     var embed = new EmbedBuilder();
                     embed.Description = "Anime not found.";
                     embed.Color = Color.Red;
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
             }
             catch (Exception e)
@@ -193,13 +193,13 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Anime not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
         
-        [Command("mangainfo", RunMode = RunMode.Async)]
-        public async Task MangaInfo([Remainder] string name)
+        [SlashCommand("mangainfo", "gets additional information about an AniList anime", false, RunMode.Async)]
+        public async Task MangaInfo(string name)
         {
             try
             {
@@ -219,14 +219,14 @@ namespace FishBot
                     embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":eggplant: Adult", Value = result.IsAdult, IsInline = true });
                     //embed.AddField(new EmbedFieldBuilder { Name = ":family: Relations", Value = Utils.FormatMediaRelations(result.MediaRelations), IsInline = true});
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
                 else
                 {
                     var embed = new EmbedBuilder();
                     embed.Description = "Manga not found.";
                     embed.Color = Color.Red;
-                    await Context.Channel.SendMessageAsync("", false, embed.Build());
+                    await RespondAsync(embed: embed.Build());
                 }
             }
             catch (Exception e)
@@ -234,7 +234,7 @@ namespace FishBot
                 var embed = new EmbedBuilder();
                 embed.Description = "Manga not found.";
                 embed.Color = Color.Red;
-                await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await RespondAsync(embed: embed.Build());
                 await e.Log();
             }
         }
