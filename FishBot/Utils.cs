@@ -46,12 +46,12 @@ public static class Utils
             IPInterfaceProperties adapterProperties = result.GetIPProperties();
             IPAddressCollection dnsServers = adapterProperties.DnsAddresses;
 
-            IPAddress address = dnsServers[0];
+            return await dnsServers[0].PingAsync();
+        }
 
-            //set the ping options, TTL 128
+        public static async Task<long?> PingAsync(string address, int count = 4)
+        {
             PingOptions pingOptions = new PingOptions(128, true);
-
-            int numping = 4;
 
             //create a new ping instance
             Ping ping = new Ping();
@@ -59,10 +59,10 @@ public static class Utils
             //32 byte buffer (create empty)
             byte[] buffer = new byte[32];
 
-            long?[] pings = new long?[numping];
+            long?[] pings = new long?[count];
 
             //here we will ping the host numping times (standard)
-            for (int i = 0; i < numping; i++)
+            for (int i = 0; i < count; i++)
             {
                 try
                 {
@@ -108,7 +108,87 @@ public static class Utils
             int notnull = 0;
             long? returnValue = null;
 
-            for (int i = 0; i < numping; i++)
+            for (int i = 0; i < count; i++)
+            {
+                if (pings[i].HasValue)
+                {
+                    notnull++;
+                    if (returnValue.HasValue)
+                    {
+                        returnValue += pings[i].Value;
+                    }
+                    else
+                    {
+                        returnValue = pings[i].Value;
+                    }
+                }
+            }
+            returnValue /= notnull;
+
+            //return the message
+            return returnValue;
+        }
+
+        public static async Task<long?> PingAsync(this IPAddress address, int count = 4)
+        {
+            PingOptions pingOptions = new PingOptions(128, true);
+
+            //create a new ping instance
+            Ping ping = new Ping();
+
+            //32 byte buffer (create empty)
+            byte[] buffer = new byte[32];
+
+            long?[] pings = new long?[count];
+
+            //here we will ping the host numping times (standard)
+            for (int i = 0; i < count; i++)
+            {
+                try
+                {
+                    //send the ping numping times to the host and record the returned data.
+                    //The Send() method expects numping items:
+                    //1) The IPAddress we are pinging
+                    //2) The timeout value
+                    //3) A buffer (our byte array)
+                    //numping) PingOptions
+                    PingReply pingReply = await ping.SendPingAsync(address, 1000, buffer, pingOptions);
+
+                    //make sure we dont have a null reply
+                    if (!(pingReply == null))
+                    {
+                        switch (pingReply.Status)
+                        {
+                            case IPStatus.Success:
+                                pings[i] = pingReply.RoundtripTime;
+                                break;
+                            case IPStatus.TimedOut:
+                                pings[i] = null;
+                                break;
+                            default:
+                                pings[i] = null;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        pings[i] = null;
+                    }
+
+                }
+                catch (PingException ex)
+                {
+                    pings[i] = null;
+                }
+                catch (SocketException ex)
+                {
+                    pings[i] = null;
+                }
+            }
+            int notnull = 0;
+            long? returnValue = null;
+
+            for (int i = 0; i < count; i++)
             {
                 if (pings[i].HasValue)
                 {

@@ -1,5 +1,6 @@
 using Discord;
 using System.Diagnostics;
+using System.Net;
 using Anilist4Net;
 using Anilist4Net.Enums;
 using Discord.Interactions;
@@ -29,17 +30,13 @@ namespace FishBot
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int latency = Program.Bot.Latency;
-            long? ping = await Utils.PingDnsAsync();
+            long? dns = await Utils.PingDnsAsync();
+            long? anilist = await Utils.PingAsync("anilist.co");
             string text;
             watch.Stop();
-            if (!ping.HasValue)
-            {
-                text = $"DNS: null ms\nGateway: {latency} ms\nTotal Evaluation: {watch.ElapsedMilliseconds} ms";
-            }
-            else
-            {
-                text = $"DNS: {ping} ms\nGateway: {latency} ms\nTotal Evaluation: {watch.ElapsedMilliseconds} ms";
-            }
+            
+            text = $"DNS: {dns.ToString() ?? "null"} ms\nAnilist API: {anilist.ToString() ?? "null"} ms\nGateway: {latency} ms\nTotal Evaluation: {watch.ElapsedMilliseconds} ms";
+            
             var embed = new EmbedBuilder();
             embed.WithColor(Color.Green);
             embed.WithTitle("Pong!");
