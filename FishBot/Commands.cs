@@ -10,7 +10,7 @@ namespace FishBot
 {
     public class Commands : InteractionModuleBase
     {
-        [SlashCommand("help", "Gets help", false, RunMode.Async)]
+        [SlashCommand("help", "Gets help")]
         public async Task Help()
         {
             var embed = new EmbedBuilder();
@@ -23,7 +23,7 @@ namespace FishBot
         }
         
         
-        [SlashCommand("ping", "gets the response times of the server", false, RunMode.Async)]
+        [SlashCommand("ping", "gets the response times of the server")]
         public async Task Ping()
         {
             Stopwatch watch = new Stopwatch();
@@ -48,7 +48,7 @@ namespace FishBot
             await RespondAsync(embed: embed.Build());
         }
 
-        [SlashCommand("user", "gets info about an AniList user", false, RunMode.Async)]
+        [SlashCommand("user", "gets info about an AniList user")]
         public async Task User(string? userName = null)
         {
             try
@@ -70,7 +70,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("anime", "searches an AniList anime", false, RunMode.Async)]
+        [SlashCommand("anime", "searches an AniList anime")]
         public async Task Anime(string name)
         {
             try
@@ -99,7 +99,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("manga", "searches an AniList manga", false, RunMode.Async)]
+        [SlashCommand("manga", "searches an AniList manga")]
         public async Task Manga(string name)
         {
             try
@@ -128,7 +128,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("media", "searches an AniList media", false, RunMode.Async)]
+        [SlashCommand("media", "searches an AniList media")]
         public async Task Media(string name)
         {
             try
@@ -157,7 +157,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("animeinfo", "gets additional information about an AniList anime", false, RunMode.Async)]
+        [SlashCommand("animeinfo", "gets additional information about an AniList anime")]
         public async Task AnimeInfo(string name)
         {
             try
@@ -198,7 +198,7 @@ namespace FishBot
             }
         }
         
-        [SlashCommand("mangainfo", "gets additional information about an AniList anime", false, RunMode.Async)]
+        [SlashCommand("mangainfo", "gets additional information about an AniList anime")]
         public async Task MangaInfo(string name)
         {
             try

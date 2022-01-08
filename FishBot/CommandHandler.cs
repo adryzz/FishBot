@@ -2,6 +2,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Reflection;
 using Discord.Interactions;
+using RunMode = Discord.Interactions.RunMode;
 
 namespace FishBot
 {
@@ -13,7 +14,7 @@ namespace FishBot
         public async Task InitialiseAsync(DiscordSocketClient client)
         {
             Client = client;
-            Service = new InteractionService(Client);
+            Service = new InteractionService(Client, new InteractionServiceConfig { DefaultRunMode = RunMode.Async });
             await Service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
             Client.SlashCommandExecuted += HandleCommandAsync;
             Client.Ready += ClientOnReady;
@@ -21,7 +22,7 @@ namespace FishBot
 
         private async Task ClientOnReady()
         {
-            await Service.RegisterCommandsGloballyAsync();
+            await Service.RegisterCommandsToGuildAsync(528487200581615616);
         }
 
         private async Task HandleCommandAsync(SocketSlashCommand s)
