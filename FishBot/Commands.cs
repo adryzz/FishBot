@@ -170,8 +170,8 @@ namespace FishBot
                     embed.AddField(new EmbedFieldBuilder { Name = ":book: Genres", Value = string.Join(", ", result.Genres), IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":clapper: Episodes", Value = result.Episodes });
                     embed.AddField(new EmbedFieldBuilder { Name = ":clock10: Duration", Value = $"{result.Duration}min/episode", IsInline = true });
-                    embed.AddField(new EmbedFieldBuilder { Name = ":calendar_spiral: Aired", Value = $"{result.Season} {result.SeasonYear}", IsInline = true });
-                    embed.AddField(new EmbedFieldBuilder { Name = ":scroll: Status", Value = $"{result.Status}", IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":calendar_spiral: Aired", Value = $"{result.Season?.ToStringNice()} {result.SeasonYear}", IsInline = true });
+                    embed.AddField(new EmbedFieldBuilder { Name = ":scroll: Status", Value = result.Status.ToStringNice(), IsInline = true });
                     //embed.AddField(new EmbedFieldBuilder { Name = ":calendar: Airing schedule", Value = $"{Instant.FromUnixTimeSeconds(result.AiringSchedule.Nodes[0].AiringAt.Value)}", IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":heart: Favourites", Value = result.Favourites, IsInline = true });
                     embed.AddField(new EmbedFieldBuilder { Name = ":popcorn: Popularity", Value = result.Popularity, IsInline = true });

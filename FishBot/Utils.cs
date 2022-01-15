@@ -195,4 +195,10 @@ public static class Utils
             TypeColors.TryGetValue(type, out string? code);
             return code ?? String.Empty;
         }
+
+        public static string ToStringNice(this Enum yep)
+        {
+            string str = yep.ToString().ToLower();
+            return char.ToUpper(str[0]) + str.Substring(1);
+        }
     }
