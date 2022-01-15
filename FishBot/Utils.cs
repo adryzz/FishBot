@@ -198,7 +198,8 @@ public static class Utils
 
         public static string ToStringNice(this Enum yep)
         {
-            string str = yep.ToString().ToLower();
-            return char.ToUpper(str[0]) + str.Substring(1);
+            char[] a = yep.ToString().ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+            return new string(a);
         }
     }
